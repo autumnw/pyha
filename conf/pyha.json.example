@@ -1,0 +1,17 @@
+{
+	"version": 1,
+	"is_master": true,
+	"service" : {
+		"name": "sensu-client",
+		"stop_hook": {
+			"type": "stophook_sensu_client",
+			"url": "http://vip-wcdc-aws-staging-sensu-api.adskengineer.net:4567/clients",
+			"user": "admin",
+			"password": ""
+		}	
+	},
+	"peer": {
+		"master": "wcstg-sa-http01.adskengineer.net",
+		"slave" : "wcstg-sa-http02.adskengineer.net"
+	}
+}

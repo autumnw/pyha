@@ -1,0 +1,82 @@
+#!/bin/sh
+#
+# Start/stop the pyha backend job: pyha
+#
+# chkconfig: 2345 90 60
+
+
+[ -f /usr/bin/pyha ] || { 
+    [ "$1" = "status" ] && exit 4 || exit 6 
+}
+
+RETVAL=0
+exec="/usr/bin/pyha"
+prog="pyha"
+lockfile=/var/lock/subsys/pyha
+exec_user="root"
+
+PID=`ps -ef | grep pyha  | grep '/usr/bin' | awk '{print $2}'`
+
+start() {
+    [ -x $exec ] || exit 5
+    echo -n $"Starting $prog: "
+    $exec > /dev/null 2>&1 &
+    retval=$?
+    sleep 2
+    PID=`ps -ef | grep pyha  | grep '/usr/bin' | awk '{print $2}'` 
+    echo "${PID}"
+    [ $retval -eq 0 ] && touch $lockfile
+}
+
+stop() {
+
+    echo -n $"Stopping $prog: "
+	if [ "X${PID}" != 'X' ]; then
+		kill -9 ${PID}
+		RETVAL=3
+	else
+		failure $"Stopping $prog"
+	fi
+    retval=$?
+    sleep 2
+    echo "Done"
+    [ $retval -eq 0 ] && rm -f $lockfile
+}
+
+restart() {
+    status && stop
+    start
+}
+
+
+status() {
+    if [ "X${PID}" = 'X' ]; 
+    then
+    	echo "${prog} is not running"
+    	return 1
+    else
+    	echo "${prog} is running : ${PID}"
+    	return 0
+    fi
+}
+
+case "$1" in
+    start)
+        status && exit 0
+        $1
+        ;;
+    stop)
+        status || exit 0
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    status)
+        status
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart}"
+        exit 2
+esac
+exit $?

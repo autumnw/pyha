@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: pyha
+Version: 1.0.0dev
+Summary: Python based HA cluster
+Home-page: UNKNOWN
+Author: Autumn Wang
+Author-email: shoujinwang@gmail.com
+License: MIT
+Description: Python based HA cluster
+Keywords: HA
+Platform: UNKNOWN
