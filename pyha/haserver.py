@@ -35,6 +35,9 @@ class Pyha:
                 
                 
     def run_stop_hook(self, hook, is_master):
+        if not hook:
+            return
+
         logger.info("run stop hook : %r" % hook)
         hook_type = hook['type']
         if hook_type == 'stophook_sensu_client':
